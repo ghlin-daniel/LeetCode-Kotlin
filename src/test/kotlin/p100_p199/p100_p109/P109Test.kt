@@ -1,5 +1,6 @@
-package p100_p199
+package p100_p199.p100_p109
 
+import ds.ListNode
 import ds.TreeNode
 import kotlin.math.abs
 import kotlin.math.max
@@ -8,44 +9,52 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class P108Test {
-  private val p108 = P108()
+class P109Test {
+  private val p109 = P109()
+
+  private fun linkedList(vararg vals: Int): ListNode? {
+    val dummy = ListNode(0)
+    var cur = dummy
+    for (v in vals) {
+      cur.next = ListNode(v); cur = cur.next!!
+    }
+    return dummy.next
+  }
 
   private fun inOrder(node: TreeNode?): List<Int> =
-    if (node == null) emptyList()
+    if (node == null) emptyList<Int>()
     else inOrder(node.left) + node.`val` + inOrder(node.right)
 
   private fun height(node: TreeNode?): Int =
     if (node == null) 0 else 1 + max(height(node.left), height(node.right))
 
-  private fun isBalanced(node: TreeNode?): Boolean {
-    return node == null || abs(height(node.left) - height(node.right)) <= 1 &&
+  private fun isBalanced(node: TreeNode?): Boolean =
+    node == null || abs(height(node.left) - height(node.right)) <= 1 &&
         isBalanced(node.left) && isBalanced(node.right)
-  }
 
   @Test
-  fun emptyArray() {
-    assertNull(p108.sortedArrayToBST(intArrayOf()))
+  fun emptyList() {
+    assertNull(p109.sortedListToBST(null))
   }
 
   @Test
   fun singleElement() {
-    val root = p108.sortedArrayToBST(intArrayOf(0))
+    val root = p109.sortedListToBST(linkedList(0))
     assertEquals(listOf(0), inOrder(root))
     assertTrue(isBalanced(root))
   }
 
   @Test
   fun twoElements() {
-    val root = p108.sortedArrayToBST(intArrayOf(1, 3))
+    val root = p109.sortedListToBST(linkedList(1, 3))
     assertEquals(listOf(1, 3), inOrder(root))
     assertTrue(isBalanced(root))
   }
 
   @Test
   fun leetcodeExample1() {
-    // [-10,-3,0,5,9] → root=0, balanced BST
-    val root = p108.sortedArrayToBST(intArrayOf(-10, -3, 0, 5, 9))
+    // [-10,-3,0,5,9] → root=0
+    val root = p109.sortedListToBST(linkedList(-10, -3, 0, 5, 9))
     assertEquals(listOf(-10, -3, 0, 5, 9), inOrder(root))
     assertEquals(0, root!!.`val`)
     assertTrue(isBalanced(root))
@@ -53,41 +62,33 @@ class P108Test {
 
   @Test
   fun leetcodeExample2() {
-    // [1,3] → root=3, left=1
-    val root = p108.sortedArrayToBST(intArrayOf(1, 3))
-    assertEquals(listOf(1, 3), inOrder(root))
+    // [0,1,2,3]
+    val root = p109.sortedListToBST(linkedList(0, 1, 2, 3))
+    assertEquals(listOf(0, 1, 2, 3), inOrder(root))
     assertTrue(isBalanced(root))
   }
 
   @Test
   fun oddLength() {
     // [1,2,3,4,5] → root=3
-    val root = p108.sortedArrayToBST(intArrayOf(1, 2, 3, 4, 5))
+    val root = p109.sortedListToBST(linkedList(1, 2, 3, 4, 5))
     assertEquals(listOf(1, 2, 3, 4, 5), inOrder(root))
     assertEquals(3, root!!.`val`)
     assertTrue(isBalanced(root))
   }
 
   @Test
-  fun evenLength() {
-    // [1,2,3,4] → root=nums[2]=3
-    val root = p108.sortedArrayToBST(intArrayOf(1, 2, 3, 4))
-    assertEquals(listOf(1, 2, 3, 4), inOrder(root))
-    assertTrue(isBalanced(root))
-  }
-
-  @Test
   fun allNegative() {
-    val root = p108.sortedArrayToBST(intArrayOf(-5, -4, -3, -2, -1))
+    val root = p109.sortedListToBST(linkedList(-5, -4, -3, -2, -1))
     assertEquals(listOf(-5, -4, -3, -2, -1), inOrder(root))
     assertTrue(isBalanced(root))
   }
 
   @Test
-  fun largerArray() {
-    val nums = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    val root = p108.sortedArrayToBST(nums)
-    assertEquals(nums.toList(), inOrder(root))
+  fun largerList() {
+    val vals = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val root = p109.sortedListToBST(linkedList(*vals))
+    assertEquals(vals.toList(), inOrder(root))
     assertTrue(isBalanced(root))
   }
 }
